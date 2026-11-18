@@ -138,6 +138,7 @@ pub mod codes {
     pub const LEX: &str = "E0001";
     pub const PARSE: &str = "E0002";
     pub const MACRO: &str = "E0003";
+    pub const IO: &str = "E0004";
 
     pub const UNKNOWN_TYPE: &str = "E0101";
     pub const UNKNOWN_NAME: &str = "E0102";

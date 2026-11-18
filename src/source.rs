@@ -118,6 +118,12 @@ impl SourceMap {
 
         let (line, col) = file.line_col(diag.span.start);
         out.push_str(&format!("  --> {}:{}:{}\n", file.display_name(), line, col));
+        if file.text.is_empty() {
+            for note in &diag.notes {
+                out.push_str(&format!("  = note: {note}\n"));
+            }
+            return out;
+        }
 
         let gutter = line.to_string();
         let pad = " ".repeat(gutter.len());

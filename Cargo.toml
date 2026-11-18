@@ -1,6 +1,12 @@
 [package]
 name = "teal"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
+description = "A fast-compiling, extensible static language (front end)"
+license = "MIT OR Apache-2.0"
+
+[[bin]]
+name = "tlc"
+path = "src/main.rs"
 
 [dependencies]
