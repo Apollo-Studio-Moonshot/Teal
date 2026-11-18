@@ -1,2 +1,4 @@
     Checking teal v0.1.0 (/Users/williamyao/Desktop/Projects/Teal)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.31s
+error: could not compile `teal` (lib test) due to 36 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `teal` (lib) due to 36 previous errors
