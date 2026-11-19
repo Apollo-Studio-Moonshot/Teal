@@ -12,6 +12,7 @@ COMMANDS:
     check       Parse and type-check without writing artifacts
     build       Check and emit `.tli` interface summaries
     emit-tli    Alias for `build`
+    emit-c      Check and emit C/native object artifacts
     deps        Print the package dependency graph
     clean       Remove the build cache
     inspect     Print the contents of a `.tli` summary
@@ -97,7 +98,7 @@ fn main() -> ExitCode {
     };
 
     match args.command.as_str() {
-        "check" | "build" | "emit-tli" => run_build(args),
+        "check" | "build" | "emit-tli" | "emit-c" => run_build(args),
         "deps" => run_deps(args),
         "clean" => run_clean(args),
         "inspect" => run_inspect(args),
