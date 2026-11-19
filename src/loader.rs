@@ -13,6 +13,7 @@
 
 use crate::ast::Module;
 use crate::checker::{self, Env};
+use crate::codegen;
 use crate::hash::{self, Digest};
 use crate::lexer::{lex, TokenKind};
 use crate::macros::{self, MacroDef};
@@ -734,6 +735,10 @@ fn compile_package(
     tli.builtin = false;
 
     if write {
+        let lowered = codegen::lower(&package.name, &modules, &result.env);
+        if let Err(diagnostics) = codegen::emit_object(target_dir, &lowered) {
+            return Err(diagnostics);
+        }
         if let Some(parent) = artifact_base.parent() {
             if let Err(error) = fs::create_dir_all(parent) {
                 return Err(vec![Diagnostic::error(

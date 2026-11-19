@@ -9,6 +9,7 @@
 
 pub mod ast;
 pub mod checker;
+pub mod codegen;
 pub mod hash;
 pub mod lexer;
 pub mod loader;

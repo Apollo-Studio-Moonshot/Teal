@@ -6,9 +6,10 @@ LL(1) lexer and parser, hygienic declarative macros, a per-function
 bidirectional type checker, deterministic `.tli` interface summaries, and an
 incremental, package-parallel build.
 
-There is deliberately **no code generator yet**. The build pipeline is
-"check and emit summaries", which is the prototype slice suggested in
-DESIGN.md §7.
+The front end also lowers checked functions to native C and emits object
+artifacts as a prototype backend. The C lowering is intentionally separate
+from the surface AST so it can be replaced by the Cranelift pipeline described
+in `DESIGN.md §4.1`.
 
 ```
 $ tlc check examples
@@ -88,6 +89,7 @@ See `examples/hello.tl` and `examples/workspace/` for complete programs.
 tlc check [path] [--json]         parse + type check (no writes)
 tlc build [path] [--target dir]   check and emit `.tli` summaries
 tlc emit-tli [path]               alias for build
+tlc emit-c [path]                 check and emit C plus native objects
 tlc deps [path]                   print the package dependency graph
 tlc inspect <file.tli>            dump a summary
 tlc clean [path]                  remove the artifact directory
@@ -146,6 +148,7 @@ touches no artifacts.
 | `src/types.rs` | Semantic types, canonical rendering/parsing |
 | `src/checker.rs` | Environment construction, per-body checker, exhaustiveness |
 | `src/tli.rs` | Deterministic binary interface summaries and fingerprints |
+| `src/codegen.rs` | Typed lowering and native C/object emission |
 | `src/loader.rs` | Discovery, DAG scheduling, incremental cache, reports |
 | `src/hash.rs` | Dependency-free SHA-256 for Merkle fingerprints |
 | `src/source.rs` | Source map and diagnostic rendering |
@@ -209,7 +212,9 @@ without reading its source.
 
 These are deliberate scope boundaries, not accidents:
 
-* **No codegen or runtime.** `tlc build` emits summaries only.
+* **Prototype native backend.** `tlc build` emits summaries, C lowering, and
+  native objects when a C compiler is available. Linking, monomorphization,
+  and Cranelift/LLVM remain future backend work.
 * **No borrow checker.** `&T`/`&mut T` are checked structurally; escaping
   borrows are not yet rejected.
 * **Generic bodies are not serialized** in `.tli`; only signatures and macros
